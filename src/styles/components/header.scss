@@ -1,0 +1,34 @@
+
+
+.fixed-header-back {
+    
+    height: 60px;
+
+    .header {
+        position: fixed;
+        background-color: rgb(122, 5, 35);
+        width: 100%;
+
+     .container {
+        .navbar {
+            width: 100%;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            & > div {
+                margin-left: 20px;
+
+                & > * {
+                    color: rgb(255, 255, 255);
+                    font-size: 20px;
+
+                    &:hover {
+                        color: rgb(134, 86, 104);
+                       
+                    }
+                }
+            }
+        }
+     }
+    }
+}
