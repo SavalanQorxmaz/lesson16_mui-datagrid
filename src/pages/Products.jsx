@@ -45,7 +45,7 @@ const Products = () => {
 
     const [data, setData] = useState([])
     let [id, setId] = useState(-1)
-    const [selected, setSelected] = useState([-1])
+    const [selected, setSelected] = useState([0])
     let [flag, setFlag] = useState(true)
   
     const navigate = useNavigate()
@@ -61,31 +61,42 @@ const Products = () => {
 
 
 
-//   const selectedRows = (val) => {
+  const selectedRows = (val) => {
 
-//     const tempArray = [...selected]
-  
-//     tempArray.map((value, index)=>{
-//         if(value == val.id){tempArray.splice(index, 1)}
-//         // console.log(value)
-//         else{tempArray.push(val.id)}
-//     })
-//     setSelected(tempArray)
-//     console.log(val.id)
-//     console.log(tempArray)
-//     if(selected.length>0){
-//         document.querySelector('.delete-rows').classList.remove("hide");
-//         document.querySelector('.delete-rows').classList.add('show')
-//     }
-//     else{
-//         document.querySelector('.delete-rows').classList.add("hide");
-//         document.querySelector('.delete-rows').classList.remove('show')
-//     }
+    const tempArray = [...selected]
+  let tempId;
+    tempId = tempArray.indexOf(val.id)
+   if( tempId < 0) {tempArray.push(val.id)}else{tempArray.splice(tempId,1)}
+    setSelected([...tempArray])
+    console.log(val.id)
+    console.log(tempArray)
+    if(tempArray.length>1){
+        document.querySelector('.delete-rows').classList.remove("hide");
+        document.querySelector('.delete-rows').classList.add('show')
+    }
+    else{
+        document.querySelector('.delete-rows').classList.add("hide");
+        document.querySelector('.delete-rows').classList.remove('show')
+    }
 
-   
-    
-  
-//   }
+  }
+
+//   promise variantinda yaz
+  const deleteSelectedRows = ()=> {
+console.log(selected.length)
+    while(selected.length >1){
+       data.map( async(rowData) =>{
+            if(selected.pop() == rowData.id){
+             await  fetch(`https://fakestoreapi.com/products/${rowData.id}`,{
+                method: "delete"
+               }).then(res=>console.log(res))
+            }
+        }
+       
+            )
+    }
+ 
+  }
 
 
   const detailsProduct = (row)=> {
@@ -99,7 +110,7 @@ const Products = () => {
 
             <div className="container">
             <Box sx={{ height: 700, width: '100%' }}>
-            <Button className='hide delete-rows' variant="contained" sx={{width: '100%'}}>Delete Selected</Button>
+            <Button onClick={deleteSelectedRows} className='hide delete-rows' variant="contained" sx={{width: '100%'}}>Delete Selected</Button>
       <DataGrid
         rows={data}
         columns={columns}
@@ -108,7 +119,7 @@ const Products = () => {
         checkboxSelection
         disableRowSelectionOnClick
         disableSelectionOnClick
-        // onCellClick={selectedRows}
+        onCellClick={selectedRows}
         onCellDoubleClick = {detailsProduct}
        
         
