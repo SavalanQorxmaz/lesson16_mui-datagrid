@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import Box from '@mui/material/Box';
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, gridRowTreeSelector } from '@mui/x-data-grid';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
 // import axios from 'axios'
@@ -45,8 +45,8 @@ const Products = () => {
 
     const [data, setData] = useState([])
     let [id, setId] = useState(-1)
-    const [selected, setSelected] = useState([0])
-    let [flag, setFlag] = useState(true)
+    const [selected, setSelected] = useState([])
+    let [flag, setFlag] = useState(false)
   
     const navigate = useNavigate()
  
@@ -57,7 +57,7 @@ const Products = () => {
         setData(val)
      })
 
-  }, [flag])
+  }, [!flag])
 
 
 
@@ -81,20 +81,15 @@ const Products = () => {
 
   }
 
-//   promise variantinda yaz
-  const deleteSelectedRows = ()=> {
+
+  const deleteSelectedRows =  ()=> {
 console.log(selected.length)
-    while(selected.length >1){
-       data.map( async(rowData) =>{
-            if(selected.pop() == rowData.id){
-             await  fetch(`https://fakestoreapi.com/products/${rowData.id}`,{
-                method: "delete"
-               }).then(res=>console.log(res))
-            }
-        }
-       
-            )
+ while(selected.length >0){
+      fetch(`https://fakestoreapi.com/products/${selected.pop()}`,{
+        method: "delete"
+       }).then(res=>console.log(res))
     }
+   
  
   }
 
